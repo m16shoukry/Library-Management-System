@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { USER_ROLE } from './interfaces/user.interface';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,7 +21,8 @@ export class User {
   @Column()
   name: string;
 
-  @Column({ select: false })
+  @Exclude()
+  @Column()
   password: string;
 
   @Column({
