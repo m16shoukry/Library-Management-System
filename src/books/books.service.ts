@@ -7,7 +7,7 @@ import { GetBookDto } from './dto/get-book.dto';
 import { PaginateResultDto } from '../core/dto/pagination/paginate-result-dto';
 import { PaginateDto } from '../core/dto/pagination/paginate-sort-dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { SearchBookDto } from './dto/search-book';
+import { SearchBookDto } from './dto/search-book.dto';
 
 @Injectable()
 export class BooksService {

@@ -23,7 +23,7 @@ import { PaginateDto } from '../core/dto/pagination/paginate-sort-dto';
 import { PaginateResultDto } from '../core/dto/pagination/paginate-result-dto';
 import { BaseApiResponse } from '../core/dto/api-response/base-api-response.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { SearchBookDto } from './dto/search-book';
+import { SearchBookDto } from './dto/search-book.dto';
 
 @Controller('books')
 @ApiTags('books')
