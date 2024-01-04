@@ -1,8 +1,10 @@
+import { CheckOut } from 'src/checkouts/checkouts.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -35,4 +37,7 @@ export class Book {
 
   @UpdateDateColumn({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToMany(() => CheckOut, (checkout) => checkout.book)
+  checkouts: CheckOut[];
 }

@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from 'db/db.config';
 import { BooksModule } from './books/books.module';
+import { CheckoutsModule } from './checkouts/checkouts.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { BooksModule } from './books/books.module';
     UserModule,
     AuthModule,
     BooksModule,
+    CheckoutsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

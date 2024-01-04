@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { USER_ROLE } from './interfaces/user.interface';
 import { Exclude } from 'class-transformer';
+import { CheckOut } from '../checkouts/checkouts.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -36,4 +38,7 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToMany(() => CheckOut, (checkout) => checkout.user)
+  checkouts: CheckOut[];
 }
