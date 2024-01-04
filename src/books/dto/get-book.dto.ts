@@ -21,7 +21,7 @@ export class GetBookDto {
   @ApiProperty({
     type: String,
     required: true,
-    description: 'The name of the book',
+    description: 'The author of the book',
   })
   author: string;
 

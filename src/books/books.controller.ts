@@ -23,6 +23,7 @@ import { PaginateDto } from '../core/dto/pagination/paginate-sort-dto';
 import { PaginateResultDto } from '../core/dto/pagination/paginate-result-dto';
 import { BaseApiResponse } from '../core/dto/api-response/base-api-response.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { SearchBookDto } from './dto/search-book';
 
 @Controller('books')
 @ApiTags('books')
@@ -58,6 +59,20 @@ export class BooksController {
     const booksList: PaginateResultDto<GetBookDto> =
       await this.bookService.findAllPaginated(paginateSortDto);
     return booksList;
+  }
+
+  @Get('search')
+  @UseGuards(JwtGuard)
+  @SwaggerApiDocumentation({
+    summary: 'Search Books List',
+    modelType: GetBookDto,
+    isArray: true,
+  })
+  async search(
+    @Query() searchBookDto: SearchBookDto,
+  ): Promise<BaseApiResponse<GetBookDto[]>> {
+    const results = await this.bookService.search(searchBookDto);
+    return new SuccessApiResponse<GetBookDto[]>(results);
   }
 
   // **** Update Book Details ****
