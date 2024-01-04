@@ -6,7 +6,7 @@ import { UpdateProfileDTO } from './dto/update-user.dto';
 import { GetUserProfileDto } from './dto/get-user.dto';
 import { PaginateResultDto } from '../core/dto/pagination/paginate-result-dto';
 import { PaginateDto } from '../core/dto/pagination/paginate-sort-dto';
-import { CreateUserDto } from '../auth/dto/createUser.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { hashPassword } from '../auth/utils/passwords';
 import { USER_ROLE } from './interfaces/user.interface';
 
@@ -16,7 +16,7 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<GetUserProfileDto> {
     const hashedPassword = hashPassword(createUserDto.password);
     const newUser = this.userRepository.create({
       ...createUserDto,
@@ -25,11 +25,11 @@ export class UserService {
     });
     await this.userRepository.save(newUser);
 
-    return newUser;
+    return newUser as GetUserProfileDto;
   }
 
-  async findOneById(id: number): Promise<User> {
-    return await this.userRepository.findOneBy({ id });
+  async findOneById(id: number): Promise<GetUserProfileDto> {
+    return (await this.userRepository.findOneBy({ id })) as GetUserProfileDto;
   }
 
   async findAllPaginated(
@@ -59,12 +59,18 @@ export class UserService {
     );
   }
 
-  async updateProfile(
+  // **** Update Profile ****
+  async update(
     userId: number,
     updateProfileDTO: UpdateProfileDTO,
   ): Promise<GetUserProfileDto> {
     await this.userRepository.update(userId, updateProfileDTO);
     const userProfile = await this.userRepository.findOneBy({ id: userId });
     return userProfile as GetUserProfileDto;
+  }
+
+  // **** Delete One User ****
+  async delete(id: number): Promise<void> {
+    await this.userRepository.delete(id);
   }
 }

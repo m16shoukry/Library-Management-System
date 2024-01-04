@@ -2,7 +2,9 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -24,7 +26,7 @@ import { PaginateDto } from '../core/dto/pagination/paginate-sort-dto';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { USER_ROLE } from './interfaces/user.interface';
 import { Roles } from '../auth/decorators/roles.decorators';
-import { CreateUserDto } from '../auth/dto/createUser.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -32,15 +34,15 @@ import { CreateUserDto } from '../auth/dto/createUser.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // **** signup user ****
+  // **** user signup ****
   @Post('signup')
   @SwaggerApiDocumentation({
     summary: 'Signup for users',
-    modelType: User,
+    modelType: GetUserProfileDto,
   })
   async signup(@Body() signupUserDto: CreateUserDto) {
     const newUser = await this.userService.createUser(signupUserDto);
-    return new SuccessApiResponse<User>(newUser);
+    return new SuccessApiResponse<GetUserProfileDto>(newUser);
   }
 
   // **** Get all users paginated for only Admins ****
@@ -49,12 +51,14 @@ export class UserController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({
-    summary: 'Get Users List with pagination and sort for only Admins',
-    modelType: User,
+    summary: 'Admin Get Users List with pagination',
+    modelType: GetUserProfileDto,
     isArray: true,
     isPagination: true,
   })
-  async findAllPaginated(@Query() paginateSortDto: PaginateDto): Promise<any> {
+  async findAllPaginated(
+    @Query() paginateSortDto: PaginateDto,
+  ): Promise<PaginateResultDto<User>> {
     const usersList: PaginateResultDto<User> =
       await this.userService.findAllPaginated(paginateSortDto);
     return usersList;
@@ -71,10 +75,23 @@ export class UserController {
     @GetUser() user: User,
     @Body() updateProfileDTO: UpdateProfileDTO,
   ): Promise<BaseApiResponse<GetUserProfileDto>> {
-    const userProfile = await this.userService.updateProfile(
+    const userProfile = await this.userService.update(
       user.id,
       updateProfileDTO,
     );
     return new SuccessApiResponse<GetUserProfileDto>(userProfile);
+  }
+
+  // **** Deleta One Book ****
+  @Delete(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(USER_ROLE.ADMIN)
+  @SwaggerApiDocumentation({
+    summary: 'Admin Delete one Book by id',
+    modelType: Object,
+  })
+  async delete(@Param('id') userId: number): Promise<BaseApiResponse<void>> {
+    await this.userService.delete(userId);
+    return new SuccessApiResponse<void>(null, 'DELETED SUCCESSFULLY');
   }
 }

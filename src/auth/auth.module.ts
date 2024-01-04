@@ -7,8 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
-  imports: [JwtModule.register({}),TypeOrmModule.forFeature([User])],
+  imports: [JwtModule.register({}), TypeOrmModule.forFeature([User])],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
