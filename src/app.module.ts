@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from 'db/db.config';
+import { BooksModule } from './books/books.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { dataSourceOptions } from 'db/db.config';
     TypeOrmModule.forRoot({ ...dataSourceOptions, autoLoadEntities: true }),
     UserModule,
     AuthModule,
+    BooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
