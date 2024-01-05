@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const logger = WinstonModule.createLogger({
@@ -17,6 +18,8 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
   });
+
+  app.use(helmet());
 
   const options = new DocumentBuilder()
     .setTitle('Library Management System APIs')

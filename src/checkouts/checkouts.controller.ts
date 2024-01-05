@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Param,
-  Post,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CheckoutsService } from './checkouts.service';
 import { JwtGuard } from '../auth/guards/jwt.guard';
@@ -17,11 +11,12 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { GetCheckoutDetailsDto } from './dto/get-checkout.dto';
 import { BaseApiResponse } from '../core/dto/api-response/base-api-response.dto';
 import { GetUserProfileDto } from '../users/dto/get-user.dto';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('checkout')
 @ApiTags('checkout')
 @ApiBearerAuth()
-@UseGuards(JwtGuard, RolesGuard)
+@UseGuards(JwtGuard, RolesGuard, ThrottlerGuard) // here used rate limit guard
 @Roles(USER_ROLE.BORROWER)
 export class CheckoutsController {
   constructor(private readonly checkoutService: CheckoutsService) {}
@@ -62,5 +57,4 @@ export class CheckoutsController {
       'BOOK RETURNED SUCCESSFULLY',
     );
   }
-
 }

@@ -8,6 +8,8 @@ import { User } from '../users/user.entity';
 import { CheckOut } from './checkouts.entity';
 import { BooksModule } from '../books/books.module';
 import { BookExistsMiddleware } from '../books/book-exists.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -16,7 +18,11 @@ import { BookExistsMiddleware } from '../books/book-exists.middleware';
     BooksModule,
   ],
   controllers: [CheckoutsController],
-  providers: [CheckoutsService],
+  providers: [CheckoutsService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    }],
   exports: [CheckoutsService],
 })
 export class CheckoutsModule {
