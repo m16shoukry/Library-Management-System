@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CheckOut } from './checkouts.entity';
 import { CHECKOUT_STATUS } from './interfaces/checkout.interface';
 import { GetCheckoutDetailsDto } from './dto/get-checkout.dto';
 import { BooksService } from '../books/books.service';
-import { ErrorApiResponse } from '../core/dto/api-response/Error-api-response.dto';
 import * as moment from 'moment';
 import { calculateEndBorrowDate } from './utils/BorrowDate';
 
@@ -26,7 +25,7 @@ export class CheckoutsService {
     const isBorrowed = await this.getOneBorrowed(userId, bookId);
 
     if (isBorrowed) {
-      throw new ErrorApiResponse('sorry, you have already borrowed this book');
+      throw new NotAcceptableException('sorry, you have already borrowed this book');
     }
 
     const newBorrow = this.checkoutRepository.create({

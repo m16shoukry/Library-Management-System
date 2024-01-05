@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from './books.entity';
 import { Like, Repository } from 'typeorm';
@@ -8,7 +8,6 @@ import { PaginateResultDto } from '../core/dto/pagination/paginate-result-dto';
 import { PaginateDto } from '../core/dto/pagination/paginate-sort-dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { SearchBookDto } from './dto/search-book.dto';
-import { ErrorApiResponse } from '../core/dto/api-response/Error-api-response.dto';
 import { CHECKOUT_STATUS } from '../checkouts/interfaces/checkout.interface';
 
 @Injectable()
@@ -86,7 +85,7 @@ export class BooksService {
   async validateQuantityAndRetrun(bookId: number): Promise<GetBookDto> {
     const book = await this.findById(bookId);
     if (!book || book.quantity === 0) {
-      throw new ErrorApiResponse('not available quantity for this book');
+      throw new NotFoundException('not available quantity for this book');
     }
     return book;
   }
