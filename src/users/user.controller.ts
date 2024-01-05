@@ -50,7 +50,7 @@ export class UserController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({
-    summary: 'Admin Get Users List with pagination',
+    summary: '[Admin] Get Users List with pagination',
     modelType: GetUserProfileDto,
     isArray: true,
     isPagination: true,
@@ -67,7 +67,7 @@ export class UserController {
   @Patch('/me')
   @UseGuards(JwtGuard)
   @SwaggerApiDocumentation({
-    summary: 'Update User Profile',
+    summary: 'User Update thier Profile',
     modelType: GetUserProfileDto,
   })
   async updateProfile(
@@ -89,7 +89,7 @@ export class UserController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({
-    summary: 'Admin Delete one Book by id',
+    summary: '[Admin] Delete one Book by id',
     modelType: Object,
   })
   async delete(@Param('id') userId: number): Promise<BaseApiResponse<void>> {

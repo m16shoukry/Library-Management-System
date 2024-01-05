@@ -38,7 +38,7 @@ export class BooksController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({
-    summary: 'Admin Add Book Details',
+    summary: '[Admin] Add Book Details',
     modelType: GetBookDto,
   })
   async create(@Body() createBookDto: CreateBookDto) {
@@ -68,7 +68,7 @@ export class BooksController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.BORROWER)
   @SwaggerApiDocumentation({
-    summary: 'list Borrower Books Currently have borrowed',
+    summary: '[Borrower] list Books Currently have borrowed',
     modelType: GetBookDto,
     isArray: true,
     isPagination: true,
@@ -100,7 +100,7 @@ export class BooksController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({
-    summary: 'Admin Update Book Details',
+    summary: '[Admin] Update Book Details',
     modelType: GetBookDto,
   })
   async update(
@@ -116,7 +116,7 @@ export class BooksController {
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({
-    summary: 'Admin Delete one Book by id',
+    summary: '[Admin] Delete one Book by id',
     modelType: Object,
   })
   async delete(@Param('id') bookId: number): Promise<BaseApiResponse<void>> {

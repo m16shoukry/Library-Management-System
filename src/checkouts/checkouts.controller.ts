@@ -11,7 +11,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { GetCheckoutDetailsDto } from './dto/get-checkout.dto';
 import { BaseApiResponse } from '../core/dto/api-response/base-api-response.dto';
 import { GetUserProfileDto } from '../users/dto/get-user.dto';
-import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('checkout')
 @ApiTags('checkout')
