@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsString } from 'class-validator';
 import { USER_ROLE } from '../interfaces/user.interface';
 
 export class GetUserProfileDto {
@@ -17,13 +17,13 @@ export class GetUserProfileDto {
 
   @IsString()
   @ApiProperty({ type: String, description: 'User role', enum: [USER_ROLE] })
-  role: USER_ROLE;
+  role: string;
 
-  @IsString()
+  @IsDateString()
   @ApiProperty({ type: Date, description: 'User createdAt' })
   createdAt: Date;
 
-  @IsString()
+  @IsDateString()
   @ApiProperty({ type: Date, description: 'User updatedAt' })
   updatedAt: Date;
 }

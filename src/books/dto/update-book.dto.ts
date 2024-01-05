@@ -8,48 +8,38 @@ import {
 
 export class UpdateBookDto {
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({
     type: String,
-    required: true,
     description: 'The title of the book',
   })
-  title: string;
+  title?: string;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({
     type: String,
-    required: true,
     description: 'The name of the book',
   })
-  author: string;
+  author?: string;
 
   @IsString()
-  @IsNotEmpty()
   @IsISBN()
   @ApiProperty({
     type: String,
-    required: true,
     description: 'The ISBN of the book',
   })
-  ISBN: string;
+  ISBN?: string;
 
   @IsNumber()
-  @IsNotEmpty()
   @ApiProperty({
     type: Number,
-    required: true,
     description: 'The quantity of the book',
   })
-  quantity: number;
+  quantity?: number;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({
     type: String,
-    required: true,
     description: 'The shelf location of the book at the library',
   })
-  shelf: string;
+  shelf?: string;
 }

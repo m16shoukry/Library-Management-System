@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -24,6 +24,8 @@ import { PaginateResultDto } from '../core/dto/pagination/paginate-result-dto';
 import { BaseApiResponse } from '../core/dto/api-response/base-api-response.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { SearchBookDto } from './dto/search-book.dto';
+import { GetUserProfileDto } from '../users/dto/get-user.dto';
+import { GetUser } from '../auth/decorators/get-user.decorators';
 
 @Controller('books')
 @ApiTags('books')
@@ -32,7 +34,7 @@ export class BooksController {
   constructor(private readonly bookService: BooksService) {}
 
   // **** admin create book details ****
-  @Post('create')
+  @Post()
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({
@@ -61,6 +63,24 @@ export class BooksController {
     return booksList;
   }
 
+  
+  @Get('borrowed')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(USER_ROLE.BORROWER)
+  @SwaggerApiDocumentation({
+    summary: 'list Borrower Books Currently have borrowed',
+    modelType: GetBookDto,
+    isArray: true,
+    isPagination: true,
+  })
+  async listUserBorrowedBooks(
+    @GetUser() user: GetUserProfileDto,
+    @Query() paginateSortDto: PaginateDto,
+  ): Promise<PaginateResultDto<GetBookDto>> {
+    const bookList = await this.bookService.findAllBorrowedByUser(user.id, paginateSortDto);
+    return bookList;
+  }
+
   @Get('search')
   @UseGuards(JwtGuard)
   @SwaggerApiDocumentation({
@@ -76,7 +96,7 @@ export class BooksController {
   }
 
   // **** Update Book Details ****
-  @Put(':id')
+  @Patch(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
   @SwaggerApiDocumentation({

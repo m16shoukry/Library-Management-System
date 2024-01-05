@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CHECKOUT_STATUS } from './interfaces/checkout.interface';
 
 @Entity({ name: 'checkouts' })
 export class CheckOut {
@@ -31,6 +32,9 @@ export class CheckOut {
     eager: true,
   })
   book: Book;
+
+  @Column({ type: 'enum', enum: CHECKOUT_STATUS })
+  status: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   startBorrowDate: Date;

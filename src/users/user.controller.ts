@@ -1,19 +1,16 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
   Query,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { User } from './user.entity';
 import { BaseApiResponse } from '../core/dto/api-response/base-api-response.dto';
 import { SuccessApiResponse } from '../core/dto/api-response/success-api-response.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
@@ -42,11 +39,13 @@ export class UserController {
   })
   async signup(@Body() signupUserDto: CreateUserDto) {
     const newUser = await this.userService.createUser(signupUserDto);
-    return new SuccessApiResponse<GetUserProfileDto>(newUser);
+    return new SuccessApiResponse<GetUserProfileDto>(
+      newUser,
+      'Signedup SUCCESSFULLY',
+    );
   }
 
   // **** Get all users paginated for only Admins ****
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get('list')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.ADMIN)
@@ -58,28 +57,31 @@ export class UserController {
   })
   async findAllPaginated(
     @Query() paginateSortDto: PaginateDto,
-  ): Promise<PaginateResultDto<User>> {
-    const usersList: PaginateResultDto<User> =
+  ): Promise<PaginateResultDto<GetUserProfileDto>> {
+    const usersList: PaginateResultDto<GetUserProfileDto> =
       await this.userService.findAllPaginated(paginateSortDto);
     return usersList;
   }
 
   // **** Update Profile ****
-  @Put('/me')
+  @Patch('/me')
   @UseGuards(JwtGuard)
   @SwaggerApiDocumentation({
     summary: 'Update User Profile',
     modelType: GetUserProfileDto,
   })
   async updateProfile(
-    @GetUser() user: User,
+    @GetUser() user: GetUserProfileDto,
     @Body() updateProfileDTO: UpdateProfileDTO,
   ): Promise<BaseApiResponse<GetUserProfileDto>> {
     const userProfile = await this.userService.update(
       user.id,
       updateProfileDTO,
     );
-    return new SuccessApiResponse<GetUserProfileDto>(userProfile);
+    return new SuccessApiResponse<GetUserProfileDto>(
+      userProfile,
+      'UPDATED SUCCESSFULLY',
+    );
   }
 
   // **** Deleta One Book ****

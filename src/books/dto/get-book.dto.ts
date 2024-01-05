@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsDateString,
   IsISBN,
   IsNotEmpty,
   IsNumber,
@@ -7,6 +8,11 @@ import {
 } from 'class-validator';
 
 export class GetBookDto {
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty({ type: Number, required: true, description: 'book id' })
+  id: number;
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
@@ -53,11 +59,11 @@ export class GetBookDto {
   })
   shelf: string;
 
-  @IsString()
+  @IsDateString()
   @ApiProperty({ type: Date, description: 'User createdAt' })
   createdAt: Date;
 
-  @IsString()
+  @IsDateString()
   @ApiProperty({ type: Date, description: 'User updatedAt' })
   updatedAt: Date;
 }
