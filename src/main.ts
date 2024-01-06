@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import helmet from 'helmet';
+import * as compression from 'compression';
+import { GlobalExceptionFilter } from './core/exception-filters/global-exception.filter';
 
 async function bootstrap() {
   const logger = WinstonModule.createLogger({
@@ -18,8 +20,8 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
   });
-
   app.use(helmet());
+  app.use(compression());
 
   const options = new DocumentBuilder()
     .setTitle('Library Management System APIs')

@@ -10,6 +10,7 @@ import { BooksModule } from './books/books.module';
 import { CheckoutsModule } from './checkouts/checkouts.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -18,20 +19,15 @@ import { APP_GUARD } from '@nestjs/core';
     ThrottlerModule.forRoot([
       //** config rate limit to any req to app */
       {
-        name: 'medium',
         ttl: 60000, //**the time to live in milliseconds */
         limit: 10, // ** the maximum number of requests */
-      },
-      {
-        name: 'short',
-        ttl: 1000,
-        limit: 3,
       },
     ]),
     UserModule,
     AuthModule,
     BooksModule,
     CheckoutsModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [

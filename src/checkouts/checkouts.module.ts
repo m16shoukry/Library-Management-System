@@ -15,7 +15,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
   imports: [
     TypeOrmModule.forFeature([Book, User, CheckOut]),
     UserModule,
-    BooksModule,
+    BooksModule
   ],
   controllers: [CheckoutsController],
   providers: [CheckoutsService,

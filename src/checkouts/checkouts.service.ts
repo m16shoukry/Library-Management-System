@@ -1,4 +1,7 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CheckOut } from './checkouts.entity';
@@ -20,12 +23,13 @@ export class CheckoutsService {
     userId: number,
     bookId: number,
   ): Promise<GetCheckoutDetailsDto> {
-  
     // check if still borrowed same book by same user
     const isBorrowed = await this.getOneBorrowed(userId, bookId);
 
     if (isBorrowed) {
-      throw new NotAcceptableException('sorry, you have already borrowed this book');
+      throw new NotAcceptableException(
+        'sorry, you have already borrowing this book',
+      );
     }
 
     const newBorrow = this.checkoutRepository.create({
@@ -78,5 +82,77 @@ export class CheckoutsService {
     });
 
     return checkout;
+  }
+
+  async getOverDueBorrowsLastMonth(): Promise<GetCheckoutDetailsDto[]> {
+    const lastMonthStartDate = moment()
+      .subtract(1, 'months')
+      .startOf('month')
+      .toDate();
+    const lastMonthEndDate = moment()
+      .subtract(1, 'months')
+      .endOf('month')
+      .toDate();
+
+    const overDueBorrows = await this.checkoutRepository
+      .createQueryBuilder('checkouts')
+      .leftJoinAndSelect('checkouts.user', 'users')
+      .leftJoinAndSelect('checkouts.book', 'books')
+      .where('checkouts.startBorrowDate BETWEEN :start AND :end', {
+        start: lastMonthStartDate,
+        end: lastMonthEndDate,
+      })
+      .andWhere(
+        '(checkouts.endBorrowDate < checkouts.returnedDate OR checkouts.returnedDate IS NULL)',
+      )
+      .orderBy('checkouts.startBorrowDate', 'ASC')
+      .getMany();
+
+    return overDueBorrows;
+  }
+
+  async getAllBorrowsLastMonth(): Promise<GetCheckoutDetailsDto[]> {
+    const lastMonthStartDate = moment()
+      .subtract(1, 'months')
+      .startOf('month')
+      .toDate();
+    const lastMonthEndDate = moment()
+      .subtract(1, 'months')
+      .endOf('month')
+      .toDate();
+
+    const lastMonthBorrows = await this.checkoutRepository
+      .createQueryBuilder('checkouts')
+      .leftJoinAndSelect('checkouts.user', 'users')
+      .leftJoinAndSelect('checkouts.book', 'books')
+      .where('checkouts.startBorrowDate BETWEEN :start AND :end', {
+        start: lastMonthStartDate,
+        end: lastMonthEndDate,
+      })
+      .orderBy('checkouts.startBorrowDate', 'ASC')
+      .getMany();
+
+    return lastMonthBorrows;
+  }
+
+  async getPeriodBorrows(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<GetCheckoutDetailsDto[]> {
+    const periodBorrows = await this.checkoutRepository
+      .createQueryBuilder('checkouts')
+      .leftJoinAndSelect('checkouts.user', 'users')
+      .leftJoinAndSelect('checkouts.book', 'books')
+      .where(
+        'DATE(checkouts.startBorrowDate) >= :start AND DATE(checkouts.startBorrowDate) <= :end',
+        {
+          start: startDate,
+          end: endDate,
+        },
+      )
+      .orderBy('checkouts.startBorrowDate', 'ASC')
+      .getMany();
+
+    return periodBorrows;
   }
 }
