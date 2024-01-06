@@ -84,7 +84,7 @@ export class CheckoutsService {
     return checkout;
   }
 
-  async getOverDueBorrowsLastMonth(): Promise<GetCheckoutDetailsDto[]> {
+  async getOverdueBorrowsLastMonth(): Promise<GetCheckoutDetailsDto[]> {
     const lastMonthStartDate = moment()
       .subtract(1, 'months')
       .startOf('month')
@@ -94,7 +94,7 @@ export class CheckoutsService {
       .endOf('month')
       .toDate();
 
-    const overDueBorrows = await this.checkoutRepository
+    const overdueBorrows = await this.checkoutRepository
       .createQueryBuilder('checkouts')
       .leftJoinAndSelect('checkouts.user', 'users')
       .leftJoinAndSelect('checkouts.book', 'books')
@@ -108,7 +108,7 @@ export class CheckoutsService {
       .orderBy('checkouts.startBorrowDate', 'ASC')
       .getMany();
 
-    return overDueBorrows;
+    return overdueBorrows;
   }
 
   async getAllBorrowsLastMonth(): Promise<GetCheckoutDetailsDto[]> {

@@ -5,7 +5,6 @@ import {
   Query,
   Res,
   StreamableFile,
-  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -16,18 +15,17 @@ import { USER_ROLE } from '../users/interfaces/user.interface';
 import { ReportsService } from './reports.service';
 import { SwaggerApiDocumentation } from '../core/decorators/swagger-api-documentation.decorator';
 import { PeriodOfBorrowsDto } from './dto/borrow-periods.dto';
-import { ErrorApiResponse } from 'src/core/dto/api-response/Error-api-response.dto';
-import { GlobalExceptionFilter } from 'src/core/exception-filters/global-exception.filter';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('reports')
 @ApiTags('reports')
 @ApiBearerAuth()
-// @UseGuards(JwtGuard, RolesGuard, ThrottlerGuard)
-// @Roles(USER_ROLE.ADMIN)
+@UseGuards(JwtGuard, RolesGuard, ThrottlerGuard)
+@Roles(USER_ROLE.ADMIN)
 export class ReportsController {
   constructor(private readonly reportService: ReportsService) {}
 
-  @Get('lastMonthOverDue')
+  @Get('lastMonthOverdue')
   @Header(
     'Content-Disposition',
     'attachment; filename=last_month_overdue_borrows.xlsx',
@@ -36,10 +34,10 @@ export class ReportsController {
     summary: 'Exports all overdue borrows of the last month Report',
     modelType: Buffer,
   })
-  async exportOverDueBorrowsLastMonth(
+  async exportOverdueBorrowsLastMonth(
     @Res({ passthrough: true }) res: Response,
   ) {
-    const buffer = await this.reportService.exportOverDueBorrowsLastMonth();
+    const buffer = await this.reportService.exportOverdueBorrowsLastMonth();
     return new StreamableFile(buffer);
   }
 

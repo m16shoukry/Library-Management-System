@@ -26,12 +26,12 @@ export class ReportsService {
     return buffer;
   }
 
-  async exportOverDueBorrowsLastMonth() {
-    const overDueBorrows =
-      await this.checkoutService.getOverDueBorrowsLastMonth();
+  async exportOverdueBorrowsLastMonth() {
+    const overdueBorrows =
+      await this.checkoutService.getOverdueBorrowsLastMonth();
 
     //** map the required data in the sheet */
-    const data = overDueBorrows.map((checkout) => {
+    const data = overdueBorrows.map((checkout) => {
       //** calculate due in days */
       let returned = checkout.returnedDate
         ? moment(checkout.returnedDate)

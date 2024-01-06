@@ -63,7 +63,6 @@ export class BooksController {
     return booksList;
   }
 
-  
   @Get('borrowed')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(USER_ROLE.BORROWER)
@@ -77,8 +76,29 @@ export class BooksController {
     @GetUser() user: GetUserProfileDto,
     @Query() paginateSortDto: PaginateDto,
   ): Promise<PaginateResultDto<GetBookDto>> {
-    const bookList = await this.bookService.findAllBorrowedByUser(user.id, paginateSortDto);
+    const bookList = await this.bookService.findAllBorrowedByUser(
+      user.id,
+      paginateSortDto,
+    );
     return bookList;
+  }
+
+  // **** list overdue books ****
+  @Get('overdue')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(USER_ROLE.ADMIN)
+  @SwaggerApiDocumentation({
+    summary: '[ADMIN] Get Overdue Books List',
+    modelType: GetBookDto,
+    isArray: true,
+    isPagination: true,
+  })
+  async listOverdueBooks(
+    @Query() paginateSortDto: PaginateDto,
+  ): Promise<PaginateResultDto<GetBookDto>> {
+    const overdueBooksList: PaginateResultDto<GetBookDto> =
+      await this.bookService.listOverdueBooks(paginateSortDto);
+    return overdueBooksList;
   }
 
   @Get('search')

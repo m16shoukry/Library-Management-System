@@ -122,4 +122,35 @@ export class BooksService {
       totalPages,
     );
   }
+
+  async listOverdueBooks(
+    basePaginateDto: PaginateDto,
+  ): Promise<PaginateResultDto<GetBookDto>> {
+    const { pageNumber, pageSize, sort, sortOrder } = basePaginateDto;
+
+    const skip = (pageNumber - 1) * pageSize;
+    const take = pageSize;
+
+    const [data, count] = await this.bookRepository
+      .createQueryBuilder('books')
+      .innerJoin('books.checkouts', 'checkouts')
+      .innerJoin('checkouts.user', 'users')
+      .andWhere(
+        '(checkouts.endBorrowDate < checkouts.returnedDate OR checkouts.returnedDate IS NULL)',
+      )
+      .orderBy(`books.${sort}`, sortOrder)
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(count / pageSize);
+
+    return new PaginateResultDto<GetBookDto>(
+      data,
+      count,
+      pageNumber,
+      pageSize,
+      totalPages,
+    );
+  }
 }
