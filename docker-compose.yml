@@ -1,0 +1,33 @@
+version: '3'
+services:
+    api:
+        container_name: library-management-APIs
+        build:
+            dockerfile: Dockerfile
+            context: .
+        depends_on:
+          - postgres
+        environment:
+          DB_USERNAME: postgres
+          DB_PASSWORD: password
+          DB_NAME: library_dev
+          DB_PORT: 5432
+          DB_HOST: postgres
+          JWT_SECRET: "J2MVWKLDLL5AKIA5MLUB"
+          JWT_EXPIRATION_IN_HOURS: 8
+          NODE_ENV: development
+        ports: 
+          - "8080:3000"
+    
+    postgres:
+      image: postgres:15.3
+      restart: always
+      ports:
+        - "5050:5432"
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: library_dev
+
+volumes:
+  postgres:

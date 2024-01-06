@@ -22,7 +22,11 @@ async function bootstrap() {
   });
   app.use(helmet());
   app.use(compression());
-
+  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, skipMissingProperties: true }),
+  );
+  
   const options = new DocumentBuilder()
     .setTitle('Library Management System APIs')
     .setDescription('Back End for Library Management System')
@@ -43,9 +47,7 @@ async function bootstrap() {
     customSiteTitle: 'Base Swagger API',
   });
 
-  app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, skipMissingProperties: true }),
-  );
+  
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
