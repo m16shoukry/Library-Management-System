@@ -25,7 +25,11 @@ $ npm run start:dev
 ## To view APIs Documentation and Test Inputs/Outputs
 - open in your browser while project is running [http://localhost:3000/api] for swagger.
 
+<br>
+
 ## Running Migrations
+Hint: first check in db.config.ts file for typeorm config ( synchronize: true ) 
+>> it must be false to run migration successfully.
 
 1- run build app script 
 ```bash
@@ -37,7 +41,7 @@ $ npm run build
 ```bash
 $ npm run db:run
 ```
-<br>
+<br> 
 
 ## Docker
 
