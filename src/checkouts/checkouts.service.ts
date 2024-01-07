@@ -32,6 +32,8 @@ export class CheckoutsService {
       );
     }
 
+    const book = await this.bookService.validateQuantityAndRetrun(bookId);
+
     const newBorrow = this.checkoutRepository.create({
       bookId,
       userId,
@@ -40,7 +42,7 @@ export class CheckoutsService {
     });
     await this.checkoutRepository.save(newBorrow);
 
-    const book = await this.bookService.validateQuantityAndRetrun(bookId);
+    
     await this.bookService.update(bookId, {
       quantity: book.quantity - 1,
     });
