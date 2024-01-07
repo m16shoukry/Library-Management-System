@@ -25,6 +25,19 @@ $ npm run start:dev
 ## To view APIs Documentation and Test Inputs/Outputs
 - open in your browser while project is running [http://localhost:3000/api] for swagger.
 
+## Running Migrations
+
+1- run build app script 
+```bash
+$ npm run build
+```
+<br>
+2- run migration script
+
+```bash
+$ npm run db:run
+```
+<br>
 
 ## Docker
 
