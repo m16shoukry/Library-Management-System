@@ -1,6 +1,6 @@
 ## Steps To run localy on your machine and development mode
  after clone this repo follow:
-## craete a enviroment file (.env)
+## craete an enviroment file (.env)
  1- rename the ( .env.example ) file to be .env
  <br>
  2- add required connection for your DB variable. this used (postgreSQL)
