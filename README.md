@@ -3,7 +3,7 @@
 ## craete an enviroment file (.env)
  1- rename the ( .env.example ) file to be .env
  <br>
- 2- add required connection for your DB variable. this used (postgreSQL)
+ 2- add required connection for your DB variable. here using (postgreSQL)
 
 ## Installation
 
