@@ -2,6 +2,7 @@
  after clone this repo follow:
 ## craete a enviroment file (.env)
  1- rename the ( .env.example ) file to be .env
+ <br>
  2- add required connection for your DB variable. this used (postgreSQL)
 
 ## Installation
@@ -12,7 +13,6 @@ $ npm install
 ## Building the app
 
 ```bash
-# watch mode
 $ npm run build
 ```
 ## Running the app
@@ -26,7 +26,9 @@ $ npm run start:dev
 - open in your browser while project is running [http://localhost:3000/api] for swagger.
 
 
+## Docker
 
-
-
+```bash
+$ docker-compose up
+```
 
